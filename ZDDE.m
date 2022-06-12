@@ -1,7 +1,7 @@
-classdef ZDDE
-% an encapsulated MATLAB class of ZOS-API for OpticStudio Zemax 19.4 SP2
-% Author：Terrence
-% Update Date: 2022.6.13
+classdef ZDDE < handle
+% ZDDE - An encapsulated MATLAB class of ZOS-API for OpticStudio Zemax 19.4 SP2
+% Author: Terrence Xue
+% Last Updated: 2022.6.13
 
     properties
         Mode
@@ -18,47 +18,44 @@ classdef ZDDE
     
     methods
         function obj = ZDDE(parameter)
-        %   创建 MATLAB 与 Zemax 的连接
+        %   Create connection between MATLAB and OpticStudio Zemax
         %
-        %   作者：Tingyu Xue
-        %	更新日期： 2021.9.16
-        %	函数版本： 1.0
-        %   函数依赖： 无
+        %   Author: Terrence
+        %	Last Updated: 2021.9.16
+        %	Version: 1.0
         %
-        %   此函数连接打开的 Zemax 进程，创建全局变量 TheApplication
-        %   参数 parameter： zmx文件名或实例编号
-        %   返回值 TheApplication：ZOSAPI TheApplication 对象
-        %   参考：Zemax MATLAB 应用范例
+        %   This MATLAB function connects to openning Zemax process by
+        %   creating an instance of class ZDDE.
         %
-        %   global TheApplication;
-        %   TheApplication = ZDDE();
+        %   PARAMETER parameter： zmx file name or instance number of Zemax process
+        %   RETURN TheApplication：ZOSAPI TheApplication Object
+        %
+        %   ZOS = ZDDE();
 
-            %% 创建初始连接对象 TheConnection
+           %% Create initial connection instance TheConnection
             global TheApplication;
             import System.Reflection.*;
             import ZOSAPI.*;
 
-            % 找到当前安装的 OpticStudio 版本
-            zemaxData = winqueryreg('HKEY_CURRENT_USER', 'Software\Zemax', 'ZemaxRoot');    % 获取 Zemax 文档目录
-            NetHelper = strcat(zemaxData, '\ZOS-API\Libraries\ZOSAPI_NetHelper.dll');       % 获取 ZOSAPI_NetHelper.dll 路径
-            % NetHelper = 'C:\Users\Documents\Zemax\ZOS-API\Libraries\ZOSAPI_NetHelper.dll';  % 自定义 ZOSAPI_NetHelper.dll 路径
-            NET.addAssembly(NetHelper);                                                     % 将 ZOSAPI_NetHelper.dll 添加至 MATLAB   
-
-            success = ZOSAPI_NetHelper.ZOSAPI_Initializer.Initialize();
-            % success = ZOSAPI_NetHelper.ZOSAPI_Initializer.Initialize('C:\Program Files\OpticStudio\');  % 从自定义 Zemax 程序目录初始化
+            % Find current version of opticStudio
+            zemaxData = winqueryreg('HKEY_CURRENT_USER', 'Software\Zemax', 'ZemaxRoot');    % get Zemax document path
+            NetHelper = strcat(zemaxData, '\ZOS-API\Libraries\ZOSAPI_NetHelper.dll');       % get path of ZOSAPI_NetHelper.dll
+            NET.addAssembly(NetHelper);                                                     % add ZOSAPI_NetHelper.dll to MATLAB 
+            success = ZOSAPI_NetHelper.ZOSAPI_Initializer.Initialize();                     % Initialize Opticstudio Zemax
+         
             if success == 1
                 disp(strcat('Found OpticStudio at: ', char(ZOSAPI_NetHelper.ZOSAPI_Initializer.GetZemaxDirectory())));
             else
-                % 若初始化失败，返回空
+                % If faild, returns empty.
                 TheApplication = [];
                 return;
             end
 
-            % 将 ZOS-API assemblies 添加至 MATLAB
+            % add ZOS-API assemblies to MATLAB
             NET.addAssembly(AssemblyName('ZOSAPI_Interfaces'));
             NET.addAssembly(AssemblyName('ZOSAPI'));
 
-            % 创建初始连接对象
+            % create initial connection instance
             TheConnection = ZOSAPI.ZOSAPI_Connection();
 
             if ~exist('parameter', 'var')
@@ -98,12 +95,12 @@ classdef ZDDE
                 end
             end
 
-            %% 以独立应用方式连接
+            %% Connect as standalone app
             if exist('zfile_path','var')
                 Mode = 'Standalone';
-                % 判断文件是否存在，如果不存在，返回错误
+                % Check if zmx file exist, if not, returns empty.
                 if exist(zfile_path) 
-                    % 如果路径不完整，则补全路径
+                    % Complete the path if it's incomplete.
                     if ~strcmp(':', zfile_path(2))
                         zfile_path = fullfile(pwd, zfile_path);
                     end
@@ -119,21 +116,23 @@ classdef ZDDE
                     end
 
                     if isempty(TheApplication)
-                        % 如果初始化连接失败
+                        % If failed
                         disp('Failed to initialize a connection!');
                     else
                         try
-                            TheApplication.PrimarySystem.LoadFile(zfile_path, false);% 打开模型Zemax文件
+                            TheApplication.PrimarySystem.LoadFile(zfile_path, false); % Load zmx file.
                         catch err
                             TheApplication.CloseApplication();
                             rethrow(err);
                         end
                     end
                 else
-                    % 若 zfile_path 不存在
-                    msgbox('+zdde\connect.m,  Zemax 文件不存在，请检查模型目录！');
+                    % if zfile_path do not exist
+                    msgbox('ZDDE.m,  zmx file do not exist, please check the zmx file path.');
                 end
             end
+            
+            % Set properties TheApplication and Mode.
             obj.TheApplication = TheApplication;
             obj.Mode = Mode;
         end
