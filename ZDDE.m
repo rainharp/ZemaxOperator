@@ -1,11 +1,11 @@
 classdef ZDDE < handle
 % ZDDE - An encapsulated MATLAB class of ZOS-API for OpticStudio Zemax 19.4 SP2
 % Author: Terrence Xue
-% Last Updated: 2022.6.13
+% Last Updated: 2022.6.15
 
     properties
-        Mode
-        TheApplication
+        Mode                 
+        TheApplication       
     end
     
     properties(Dependent)
@@ -304,6 +304,13 @@ classdef ZDDE < handle
             obj.TheApplication.PrimarySystem.LDE.GetSurfaceAt(surfaceID).TypeData.IsStop = 1;      % set surfaceID as stop
         end
         
+        function setNSCCoating(obj, objectID, surfaceID, coatingString)
+        %setCoating - setting coating of NSC object
+        % Author: Terrence Xue
+        % Last updated: 2022.6.15
+            obj.NCE.GetObjectAt(objectID).CoatScatterData.GetFaceData(surfaceID).Coating = coatingString;
+        end
+
         function setWavelength(obj, wavelength)
             %setWavelength - set Primary Wavelength
             % last updated: 2022.6.13
@@ -384,8 +391,11 @@ classdef ZDDE < handle
         end
         
         function NSCTrace(obj, FileName)
-            % NSC Ray Tracing
-            File = obj.TheSystem.SystemFile;              % Zemax File Path
+        %NSCTrace - Perform NSC Tracing and save ZRD file.
+        % Author: Terrence Xue
+        % Last updated: 2022.6.15
+
+            % Close opening Tool
             if ~isempty(obj.TheSystem.Tools.CurrentTool)
                 obj.TheSystem.Tools.CurrentTool.Close();
             end
