@@ -311,6 +311,10 @@ classdef ZDDE < handle
             obj.TheApplication.PrimarySystem.SystemData.Wavelengths.GetWavelength(1).MakePrimary;
         end
         
+        function Wavelength = getWavelength(obj, id)
+            Wavelength = obj.TheApplication.PrimarySystem.SystemData.Wavelengths.GetWavelength(id);
+        end
+
         function varargout = getMFE(obj,varargin)
             %getMFE - get merit function table (value)
             %
@@ -374,11 +378,14 @@ classdef ZDDE < handle
         function Surface = getSurface(obj,id)
             Surface = obj.LDE.GetSurfaceAt(id);
         end
+
+        function Object = getObject(obj, id)
+            Object = obj.NCE.GetObjectAt(id);
+        end
         
         function NSCTrace(obj, FileName)
             % NSC Ray Tracing
             File = obj.TheSystem.SystemFile;              % Zemax File Path
-            obj.TheSystem.LoadFile(File, false);
             if ~isempty(obj.TheSystem.Tools.CurrentTool)
                 obj.TheSystem.Tools.CurrentTool.Close();
             end
@@ -414,6 +421,11 @@ classdef ZDDE < handle
             colorbar;
         end
         
+        function LoadCoatingFile(obj, CoatingFileName)
+            % 导入镀膜文件
+            obj.TheSystem.SystemData.Files.CoatingFile = CoatingFileName;
+        end
+
         function Result = getZRDResult(obj, ZRDFilePath)
         % Read ZRD Files
             if ~strcmp(ZRDFilePath(2),':')
