@@ -1,5 +1,5 @@
 ![](https://github.com/rainharp/ZOperator/blob/main/Doc/Logo.png?raw=true)
-### ZOperator
+### ZemaxOperator
 
 an encapsulated [MATLAB](https://www.mathworks.com/products/matlab.html) class of ZOS-API for **[OpticStudio Zemax 19.4](https://www.zemax.com/)**. 
 
