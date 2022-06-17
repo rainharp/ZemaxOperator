@@ -1,7 +1,7 @@
 ![](https://github.com/rainharp/ZOperator/blob/main/Doc/Logo.png)
 ### ZemaxOperator
 
-ZemaxOperator is an encapsulated [MATLAB](https://www.mathworks.com/products/matlab.html) class of ZOS-API for **[OpticStudio Zemax 19.4](https://www.zemax.com/)**. For those who are familiar with Python,  [PyZDDE](https://github.com/xzos/PyZDDE) and [PyZOS](https://github.com/xzos/pyzos) is alternative choices for ZOS-API programming.
+ZemaxOperator is an encapsulated [MATLAB](https://www.mathworks.com/products/matlab.html) class of ZOS-API for **[OpticStudio Zemax 19.4](https://www.zemax.com/)**. For those who are familiar with Python,  [PyZDDE](https://github.com/xzos/PyZDDE) and [PyZOS](https://github.com/xzos/pyzos) are alternative choices for ZOS-API programming.
 
 ### Current Version
 1.0.0 (Last significant update on 6/16/2022)
