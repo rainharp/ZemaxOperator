@@ -8,9 +8,6 @@ ZemaxOperator is an encapsulated [MATLAB](https://www.mathworks.com/products/mat
 ### Documentation
 The ZOperator documentation is currently hosted in the [GitHub Wiki](https://github.com/rainharp/MZDDE/wiki).
 
-### License
-The code is under the [MIT License](http://opensource.org/licenses/MIT).
-
 ### Contact
 If you have any question, please feel free to contact me at [xuetingyu@126.com](mailto:xuetingyu@126.com).
 
